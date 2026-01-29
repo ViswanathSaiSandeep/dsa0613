@@ -1,0 +1,43 @@
+# Visualising Uncertainity
+
+# Data Set
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+library(ggplot2)
+
+# 1) Confidence Interval Plot
+
+ci_data <- aggregate(Sales ~ Category, data, mean)
+ci_data$Lower <- ci_data$Sales - 20
+ci_data$Upper <- ci_data$Sales + 20
+
+ggplot(ci_data, aes(x = Category, y = Sales)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.2) +
+  theme_minimal()
+
+# 2) Bootstrapping / Hypothetical Outcomes
+
+boot_data <- data.frame(
+  Sales = sample(data$Sales, 1000, replace = TRUE)
+)
+
+ggplot(boot_data, aes(x = Sales)) +
+  geom_density(alpha = 0.3, fill = "blue") +
+  theme_minimal()
+
+# 3) Partial Transparency & Jitter
+
+ggplot(data, aes(x = Quantity, y = Sales)) +
+  geom_point(alpha = 0.9, position = position_jitter(width = 0.2)) +
+  theme_minimal()
+
+# 4) 2D Histogram
+
+ggplot(data, aes(x = Quantity, y = Sales)) +
+  geom_bin2d() +
+  theme_minimal()
+
