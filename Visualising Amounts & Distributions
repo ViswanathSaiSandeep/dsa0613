@@ -1,0 +1,145 @@
+# Visualising Amounts & Distributions
+
+library(ggplot2)
+
+# 1) Bar Plot
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x=Product, y=Sales, fill=Product))+
+  geom_bar(stat="identity")+
+  labs(
+    title = "Product vs Sales",
+    x = "Product",
+    y = "Sales"
+  )+
+  theme_minimal()
+
+# 2) Grouped Bar Plot
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x=Category, y=Sales, fill=Region))+
+  geom_bar(stat="identity", position = "dodge")+
+  labs(
+    title = "Category vs Sales by Region",
+    x = "Category",
+    y = "Sales"
+  )+
+  theme_minimal()
+
+# 3) Stacked Bar Plot
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x=Category, y=Sales, fill=Region))+
+  geom_bar(stat="identity")+
+  labs(
+    title = "Category vs Sales by Region",
+    x = "Category",
+    y = "Sales"
+  )+
+  theme_minimal()
+
+# 4) Dot Plot
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x=Product, y=Sales, color=Product))+
+  geom_point(size=4)+
+  labs(
+    title = "Product vs Sales",
+    x = "Product",
+    y = "Sales"
+  )+
+  theme_minimal()
+
+# 5) Heat Map
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x = Category, y = Region, fill = Sales)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "lightblue", high = "darkred") +
+  labs(
+    title = "Sales Heat Map by Category and Region",
+    x = "Category",
+    y = "Region"
+  )+
+  theme_minimal()
+
+# 6) Violin Plot
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x = Category, y = Sales, fill = Category)) +
+  geom_violin(trim = FALSE, alpha = 0.6) +
+  geom_boxplot(width = 0.1, fill = "white") +
+  labs(
+    title = "Sales Distribution by Category",
+    x = "Category",
+    y = "Sales"
+  )+
+  theme_minimal()
+
+# 7) Ridge Line Plot
+
+library(ggridges)
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+ggplot(data, aes(x = Sales, y = Category, fill = Category)) +
+  geom_density_ridges(alpha = 0.7) +
+  labs(
+    title = "Sales Distribution by Category",
+    x = "Sales",
+    y = "Category"
+  )+
+  theme_minimal()
+
+# 8) Histogram
+
+ggplot(data, aes(x = Sales)) +
+  geom_histogram(bins = 5, fill = "skyblue", color = "black") +
+  labs(
+    title = "Histogram of Sales",
+    x = "Sales",
+    y = "Frequency"
+  )+
+  theme_minimal()
+
+# 9) Density Plot
+
+ggplot(data, aes(x = Sales)) +
+  geom_density(fill = "lightgreen", alpha = 0.6) +
+  labs(
+    title = "Density Plot of Sales",
+    x = "Sales",
+    y = "Density"
+  )+
+  theme_minimal()
+
+# 10) Box Plot
+
+ggplot(data, aes(x = Category, y = Sales)) +
+  geom_boxplot(fill = "orange") +
+  labs(
+    title = "Sales Box Plot by Category",
+    x = "Category",
+    y = "Sales"
+  )+
+  theme_minimal()
