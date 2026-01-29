@@ -1,0 +1,71 @@
+# Visualising Geospatial Data
+
+# Data Set
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+library(ggplot2)
+
+# 1) Choropleth Map
+
+library(maps)
+
+world_map <- map_data("world")
+
+region_sales <- aggregate(Sales ~ Region, data, sum)
+
+region_sales$region <- c("India", "USA", "China", "Australia")
+
+ggplot() +
+  geom_polygon(
+    data = world_map,
+    aes(x = long, y = lat, group = group),
+    fill = "grey90", color = "white"
+  ) +
+  geom_map(
+    data = region_sales,
+    map = world_map,
+    aes(map_id = region, fill = Sales),
+    color = "black"
+  ) +
+  expand_limits(x = world_map$long, y = world_map$lat) +
+  theme_minimal()
+
+# 2) Spatial Heat Map
+
+library(ggplot2)
+
+geo_data <- data.frame(
+  Longitude = runif(nrow(data), 77, 78),
+  Latitude = runif(nrow(data), 12, 13)
+)
+
+ggplot(geo_data, aes(x = Longitude, y = Latitude)) +
+  stat_density2d(aes(fill = ..level..), geom = "polygon") +
+  theme_minimal()
+
+# 3) 3D Geospatial Plot
+
+library(rgl)
+
+x <- runif(30, 0, 10)
+y <- runif(30, 0, 10)
+z <- runif(30, 0, 100)
+
+plot3d(x, y, z, col = "blue", size = 5)
+
+# 4) Interactive Map
+
+library(leaflet)
+
+leaflet() %>%
+  addTiles() %>%
+  addCircles(
+    lng = runif(20, 77, 78),
+    lat = runif(20, 12, 13),
+    radius = 500,
+    color = "blue"
+  )
+
