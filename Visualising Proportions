@@ -1,0 +1,77 @@
+# Visualising Proportions
+
+# Data Set
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+library(ggplot2)
+
+# 1) Pie Chart
+
+pie_data <- aggregate(Sales ~ Category, data, sum)
+
+ggplot(pie_data, aes(x="", y=Sales, fill=Category))+
+  geom_bar(stat="identity", width=1)+
+  coord_polar("y")+
+  labs(title = "Sales Proportion by Category")+
+  theme_void()
+
+# 2) Tree Map
+
+library(treemapify)
+
+sales_cat <- aggregate(Sales ~ Category, data, sum)
+
+ggplot(sales_cat, aes(area=Sales, fill=Category, label=Category))+
+  geom_treemap()+
+  geom_treemap_text(color="white", place = "centre", grow = TRUE)+
+  labs(title = "Sales Treemap by Category")+
+  theme_minimal()
+
+# 3) Sunburst Chart
+
+library(sunburstR)
+
+sunburst_data <- data.frame(
+  seq = paste(data$Category, data$Product, sep = "-"),
+  freq = data$Sales
+)
+
+sunburst(sunburst_data)
+
+# 4) Parallel Sets
+
+library(ggalluvial)
+
+alluvial_data <- aggregate(Sales ~ Category + Region, data, sum)
+
+ggplot(alluvial_data,
+       aes(axis1 = Category, axis2 = Region, y = Sales)) +
+  geom_alluvium(aes(fill = Category)) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Category", "Region")) +
+  labs(title = "Sales Flow from Category to Region")
+
+# 5) Sankey Diagram
+
+library(networkD3)
+
+nodes <- data.frame(name = unique(c(data$Category, data$Region, data$Product)))
+
+links <- data.frame(
+  source = match(data$Category, nodes$name) - 1,
+  target = match(data$Region, nodes$name) - 1,
+  value = data$Sales
+)
+
+sankeyNetwork(
+  Links = links,
+  Nodes = nodes,
+  Source = "source",
+  Target = "target",
+  Value = "value",
+  NodeID = "name"
+)
