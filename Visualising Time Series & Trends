@@ -1,0 +1,49 @@
+# Visualising Time Series & Trends
+
+# Data Set
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+library(ggplot2)
+
+# 1) Line Plot
+
+ggplot(data, aes(x=as.Date(Date), y=Sales))+
+  geom_line(color="blue")+
+  geom_point(size=3)+
+  labs(title="Date wise Sales")+
+  theme_minimal()
+
+# 2) Multiple Line Plot
+
+ggplot(data, aes(x=as.Date(Date), y=Sales, color=Category))+
+  geom_line()+
+  geom_point()+
+  labs(title="Date wise Sales")+
+  theme_minimal()
+
+# 3) Dose-Response Curve
+
+ggplot(data, aes(x=Quantity, y=Sales))+
+  geom_line()+
+  geom_smooth(method="loess", se=FALSE)+
+  labs(title="Sales vs Quantity")+
+  theme_minimal()
+
+# 4) Seasonal Decomposition
+
+data <- AirPassengers
+
+decomp <- stl(data, s.window = "periodic")
+
+plot(decomp, main = "Seasonal Decomposition of Airline Passengers")
+
+
+# 5) Smoothing / Moving Average
+
+ggplot(data, aes(x = as.Date(Date), y = Sales)) +
+  geom_line(color = "grey") +
+  geom_smooth(method = "loess", color = "red", se = FALSE) +
+  theme_minimal()
