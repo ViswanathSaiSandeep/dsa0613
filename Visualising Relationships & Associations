@@ -1,0 +1,84 @@
+# Visualising Relationships & Associations
+
+# Data Set
+
+setwd <- ("C:/Users/sande/OneDrive/Documents")
+
+data <- read.csv("sample_data.csv")
+
+library(ggplot2)
+
+# 1) Bubble Plot
+
+ggplot(data, aes(x = Sales, y = Profit, size = Quantity)) +
+  geom_point(alpha = 0.6) +
+  labs(
+    title = "Bubble Chart: Sales vs Profit",
+    x = "Sales",
+    y = "Profit"
+  ) +
+  theme_minimal()
+
+# 2) Hexbin Plot
+
+library(hexbin)
+
+ggplot(data, aes(x = Sales, y = Profit)) +
+  geom_hex() +
+  labs(
+    title = "Hexbin Plot: Sales vs Profit Density",
+    x = "Sales",
+    y = "Profit"
+  ) +
+  theme_minimal()
+
+# 3) Correlogram
+
+library(corrplot)
+
+num_data <- data[, c("Sales", "Quantity", "Profit")]
+cor_matrix <- cor(num_data)
+
+corrplot(cor_matrix, method = "circle")
+
+# 4) Network Graph
+
+library(igraph)
+
+edges <- data.frame(
+  from = data$Category,
+  to = data$Product
+)
+
+graph <- graph_from_data_frame(edges)
+plot(graph)
+
+# 5) PCA Plot
+
+# Load required libraries
+library(ggplot2)
+library(ggfortify)
+
+# Select only numeric columns
+num_data <- data[, c("Sales", "Quantity", "Profit")]
+
+# Remove rows with missing or infinite values
+data_clean <- data[complete.cases(num_data), ]
+num_data_clean <- data_clean[, c("Sales", "Quantity", "Profit")]
+
+# Perform PCA with scaling
+pca_model <- prcomp(num_data_clean, scale. = TRUE)
+
+# PCA plot (colored by Category)
+autoplot(
+  pca_model,
+  data = data_clean,
+  colour = "Category",
+  size = 3
+) +
+  labs(
+    title = "PCA Plot of Sales, Quantity and Profit",
+    x = "Principal Component 1",
+    y = "Principal Component 2"
+  ) +
+  theme_minimal()
